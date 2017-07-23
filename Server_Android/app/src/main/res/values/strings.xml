@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">Server</string>
-    <string name="connect">Connect</string>
-    <string name="server_ip_hint">Enter server IP</string>
-</resources>
