@@ -4,6 +4,7 @@
 	- ```curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -```
 	- ```sudo apt-get install -y nodejs```
 * 2 Android devices
+* Make sure port **7000** is open in the network.
 
 # Steps to execute the entire project
 * Clone this repository ```git clone https://github.com/kishanrraval/CrashTestDummies.git```
@@ -18,7 +19,7 @@
 * Open Server app and enter the IP address from the above result and **tap on connect button**.
 	- You can see the incoming connection from node server's command prompt.
 * Open Client app and enter the same IP address over there as well and **tap on connect button**.
-* __You will now be able to see the live streaming from client application.__
+* __You will now be able to view the live streaming from client application.__
 	
 # Future developments
 * Conversion of single source to multiple source transmission for achieving overall functionality.
