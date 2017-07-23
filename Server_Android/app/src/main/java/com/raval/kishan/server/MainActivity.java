@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private VideoRenderer otherPeerRenderer;
     private Socket socket;
     private boolean createOffer = false;
-
+    private boolean mirror = false; // bhavya, true = front camera, false = back camera
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
         audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-        audioManager.setSpeakerphoneOn(true);
+        audioManager.setSpeakerphoneOn(false);
 
 
         PeerConnectionFactory.initializeAndroidGlobals(
@@ -112,8 +113,13 @@ public class MainActivity extends AppCompatActivity {
                 null); // Render EGL Context
 
         peerConnectionFactory = new PeerConnectionFactory();
+        VideoCapturerAndroid vc;
+        //set camera to continually auto-focus
 
-        VideoCapturerAndroid vc = VideoCapturerAndroid.create(VideoCapturerAndroid.getNameOfFrontFacingDevice(), null);
+        if(mirror)
+            vc = VideoCapturerAndroid.create(VideoCapturerAndroid.getNameOfFrontFacingDevice(), null);
+        else
+            vc = VideoCapturerAndroid.create(VideoCapturerAndroid.getNameOfBackFacingDevice(), null);
 
         localVideoSource = peerConnectionFactory.createVideoSource(vc, new MediaConstraints());
         VideoTrack localVideoTrack = peerConnectionFactory.createVideoTrack(VIDEO_TRACK_ID, localVideoSource);
@@ -132,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         VideoRendererGui.setView(videoView, null);
         try {
             otherPeerRenderer = VideoRendererGui.createGui(0, 0, 0, 0, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, true);
-            VideoRenderer renderer = VideoRendererGui.createGui(0, 0, 0, 0, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, true);
+            VideoRenderer renderer = VideoRendererGui.createGui(0, 0, 100, 100, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, mirror);
             localVideoTrack.addRenderer(renderer);
         } catch (Exception e) {
             e.printStackTrace();
